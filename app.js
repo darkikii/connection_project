@@ -1,6 +1,7 @@
 const express = require('express');
 var app = require('express')();
 const path = require('path');
+const bodyParser = require('body-parser');
 
 /*bdd*/
 require('./db/db');
@@ -17,6 +18,9 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
+
+/*pour requete post*/
+app.use(bodyParser.urlencoded({ extended: true }));
 
 /*gestion des routes*/
 const usersRoutes = require('./routers/users');
