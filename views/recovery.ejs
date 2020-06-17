@@ -7,6 +7,13 @@
     </head>
  
     <body>
+
+        <h1>Mot-de-passe oublié ?</h1>
+
+        <p>Pour réinitialiser votre mot-de-passe veuillez renseigner votre nom d'utilisateur ou votre adresse email:</p>
+
+        <hr>
+        <br>
        
        <div class="message">
            
@@ -17,9 +24,20 @@
                 <input type="submit" value="Valider"/>
             
         </form>
+
+        <br>
+        <hr>
+        <br>
+
         <form method="post">
                 <input type="email" name="email" id="email" placeholder="Votre Email"/>
                 <input type="submit" value="Valider"/>           
         </form>
+
+        <br>
+        <hr>
+        <br>
+        <p id="errorMessage" style="color: red;"><%= errorMessage %></p>
+         <p>(Les adresses "Yahoo" ne fonctionnent pas avec ce service...)</p>
     </body>
 </html>
