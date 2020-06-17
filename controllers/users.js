@@ -1,12 +1,17 @@
 var path = require('path');
 const randomPassword = require ('generate-password');
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 const Users = require('../models/Users');
 const sendMail = require('./recoveryMail');
 
 exports.accueil = (req, res, next) => {
     res.render('home', {recoveryValidation :""});
 };
+
+/*********************************************************************************************************************
+******************************************* RECOVERY *****************************************************************
+*********************************************************************************************************************/
 
 exports.recoveryP = (req, res, next) => {
 	
@@ -129,4 +134,100 @@ exports.recoveryP = (req, res, next) => {
 
 exports.recoveryG = (req, res, next) => {
     res.render('recovery', {errorMessage: ""});
+};
+
+/*********************************************************************************************************************
+******************************************* GESTION UTILISATEUR ******************************************************
+*********************************************************************************************************************/
+
+exports.registerG = (req, res, next) => {
+	res.render('register');
+};
+
+exports.registerP = (req, res, next) => {
+  const { name, email, password, password2 } = req.body;
+  let errors = [];
+
+  if (!name || !email || !password || !password2) {
+    errors.push({ msg: 'Veuillez remplir tous les champs' });
+  }
+
+  if (password != password2) {
+    errors.push({ msg: 'Mots de passe différents' });
+  }
+
+  if (password.length < 6) {
+    errors.push({ msg: 'Mot de passe de 6 caractères minimus' });
+  }
+
+  if (errors.length > 0) {
+    res.render('register', {
+      errors,
+      name,
+      email,
+      password,
+      password2
+    });
+  } else {
+    Users.findOne({ email: email }).then(user => {
+      if (user) {
+        errors.push({ msg: 'Email déjà existant' });
+        res.render('register', {
+          errors,
+          name,
+          email,
+          password,
+          password2
+        });
+      } else {
+        const newUser = new Users({
+          name,
+          email,
+          password
+        });/*fin de newUser*/
+
+        /* hashage */
+        bcrypt.genSalt(10, (err, salt) => {
+          bcrypt.hash(newUser.password, salt, (err, hash) => {
+            if (err) throw err;
+            newUser.password = hash;
+            newUser
+              .save()
+              .then(user => {
+                req.flash(
+                  'success_msg',
+                  'Vous êtes maintenant enregistré et pouvez vous connecter'
+                );
+                res.redirect('/users/login');
+              })
+              .catch(err => console.log(err));
+          });/*fin de bcrypt*/
+        });/*fin de hashage*/
+      }/*fin de if else de findOne*/
+    });/*fin de findOne*/
+  }/*fin de if else verif error*/
+};
+
+exports.loginG = (req, res, next) => {
+	res.render('login');
+};
+
+exports.loginP = (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/users/login',
+    failureFlash: true
+  })(req, res, next);
+};
+
+exports.logout = (req, res, next) => {
+  req.logout();
+  req.flash('success_msg', 'Deconnexion réussie');
+  res.redirect('/users/login');
+};
+
+exports.dashboard = (req, res, next) => {
+	res.render('dashboard', {
+    user: req.user
+  })
 };
