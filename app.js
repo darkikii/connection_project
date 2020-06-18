@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
+/*const morgan = require("morgan");*/
 
 // Config Passport 
 require('./config/passport')(passport);
@@ -54,6 +55,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+//morgan??
+/*app.use(morgan("dev"));*/
 
 /*gestion des routes*/
 const usersRoutes = require('./routers/users');
