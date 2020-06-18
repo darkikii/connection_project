@@ -4,8 +4,8 @@ const mailGun= require('nodemailer-mailgun-transport');
 
 const auth = {
 	auth: { /* api_key et domain sont nécessaires pour faire fonctionner l'appli. On les obtient en s'inscrivant sur le site de MailGun */
-		api_key: 'key-d6f21363a7c9c4ce6d5397dd9df25a77',
-		domain: 'sandbox58c6d94777404f2fbe8e9e53d8c2da11.mailgun.org'
+		api_key: '',
+		domain: ''
 	}
 };
 
