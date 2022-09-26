@@ -16,7 +16,7 @@
     "generate-password": "^1.5.1",
     "mongoose": "^5.9.18",
     "nodemailer": "^6.4.8",
-    "nodemailer-mailgun-transport": "^2.0.0",
+    "nodemailer-mailgun-transport": "^2.1.5",
     "router": "^1.3.5",
     "routers": "^0.1.4"
   }
